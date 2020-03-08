@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EmailDatabaseTable.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DatabaseServerIp" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BLANK</Value>
+    </Setting>
+    <Setting Name="DatabaseUserId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BLANK</Value>
+    </Setting>
+    <Setting Name="DatabaseUserPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BLANK</Value>
+    </Setting>
+    <Setting Name="SenderEmailId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BLANK</Value>
+    </Setting>
+    <Setting Name="SenderEmailPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BLANK</Value>
+    </Setting>
+    <Setting Name="ReceiverEmailId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BLANK</Value>
+    </Setting>
+    <Setting Name="Setting" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BLANK</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
