@@ -41,6 +41,10 @@
             this.txtReceiverEmailId = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtEmailSubject = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtEmailMessage = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -121,13 +125,13 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(57, 131);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(83, 13);
+            this.label5.Size = new System.Drawing.Size(140, 13);
             this.label5.TabIndex = 6;
-            this.label5.Text = "Sender Email ID";
+            this.label5.Text = "Sender Email ID (Gmail only)";
             // 
             // txtReceiverEmailId
             // 
-            this.txtReceiverEmailId.Location = new System.Drawing.Point(221, 199);
+            this.txtReceiverEmailId.Location = new System.Drawing.Point(221, 201);
             this.txtReceiverEmailId.Name = "txtReceiverEmailId";
             this.txtReceiverEmailId.Size = new System.Drawing.Size(218, 20);
             this.txtReceiverEmailId.TabIndex = 12;
@@ -135,7 +139,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(57, 202);
+            this.label7.Location = new System.Drawing.Point(57, 204);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(92, 13);
             this.label7.TabIndex = 10;
@@ -143,7 +147,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(219, 296);
+            this.btnSave.Location = new System.Drawing.Point(219, 394);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 14;
@@ -151,11 +155,48 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(57, 247);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(71, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Email Subject";
+            // 
+            // txtEmailSubject
+            // 
+            this.txtEmailSubject.Location = new System.Drawing.Point(220, 244);
+            this.txtEmailSubject.Name = "txtEmailSubject";
+            this.txtEmailSubject.Size = new System.Drawing.Size(219, 20);
+            this.txtEmailSubject.TabIndex = 16;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(55, 283);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(78, 13);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "Email Message";
+            // 
+            // txtEmailMessage
+            // 
+            this.txtEmailMessage.Location = new System.Drawing.Point(219, 280);
+            this.txtEmailMessage.Multiline = true;
+            this.txtEmailMessage.Name = "txtEmailMessage";
+            this.txtEmailMessage.Size = new System.Drawing.Size(273, 81);
+            this.txtEmailMessage.TabIndex = 18;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(513, 350);
+            this.ClientSize = new System.Drawing.Size(536, 450);
+            this.Controls.Add(this.txtEmailMessage);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.txtEmailSubject);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.txtReceiverEmailId);
             this.Controls.Add(this.label7);
@@ -195,5 +236,9 @@
         private System.Windows.Forms.TextBox txtReceiverEmailId;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtEmailSubject;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtEmailMessage;
     }
 }

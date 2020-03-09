@@ -40,6 +40,7 @@
             // 
             // comboBoxSelectDatabase
             // 
+            this.comboBoxSelectDatabase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSelectDatabase.FormattingEnabled = true;
             this.comboBoxSelectDatabase.Location = new System.Drawing.Point(251, 44);
             this.comboBoxSelectDatabase.Name = "comboBoxSelectDatabase";
@@ -49,6 +50,7 @@
             // 
             // comboBoxSelectTable
             // 
+            this.comboBoxSelectTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSelectTable.FormattingEnabled = true;
             this.comboBoxSelectTable.Location = new System.Drawing.Point(251, 89);
             this.comboBoxSelectTable.Name = "comboBoxSelectTable";
@@ -76,11 +78,11 @@
             // 
             // btnSendEmail
             // 
-            this.btnSendEmail.Location = new System.Drawing.Point(331, 220);
+            this.btnSendEmail.Location = new System.Drawing.Point(416, 220);
             this.btnSendEmail.Name = "btnSendEmail";
-            this.btnSendEmail.Size = new System.Drawing.Size(75, 23);
+            this.btnSendEmail.Size = new System.Drawing.Size(101, 23);
             this.btnSendEmail.TabIndex = 4;
-            this.btnSendEmail.Text = "Send Email";
+            this.btnSendEmail.Text = "Convert and Send";
             this.btnSendEmail.UseVisualStyleBackColor = true;
             this.btnSendEmail.Click += new System.EventHandler(this.btnSendEmail_Click);
             // 
@@ -97,19 +99,22 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(107, 132);
+            this.label3.Location = new System.Drawing.Point(104, 132);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(63, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Select Date";
+            this.label3.Visible = false;
             // 
             // comboBoxSelectDate
             // 
+            this.comboBoxSelectDate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSelectDate.FormattingEnabled = true;
             this.comboBoxSelectDate.Location = new System.Drawing.Point(251, 129);
             this.comboBoxSelectDate.Name = "comboBoxSelectDate";
             this.comboBoxSelectDate.Size = new System.Drawing.Size(266, 21);
             this.comboBoxSelectDate.TabIndex = 7;
+            this.comboBoxSelectDate.Visible = false;
             // 
             // SendEmailForm
             // 
@@ -128,7 +133,7 @@
             this.MaximizeBox = false;
             this.Name = "SendEmailForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Send Email";
+            this.Text = "Select Data to Send";
             this.Load += new System.EventHandler(this.SendEmailForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

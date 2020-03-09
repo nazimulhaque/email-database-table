@@ -98,12 +98,24 @@ namespace EmailDatabaseTable.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("BLANK")]
-        public string Setting {
+        public string EmailSubject {
             get {
-                return ((string)(this["Setting"]));
+                return ((string)(this["EmailSubject"]));
             }
             set {
-                this["Setting"] = value;
+                this["EmailSubject"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BLANK")]
+        public string EmailMessage {
+            get {
+                return ((string)(this["EmailMessage"]));
+            }
+            set {
+                this["EmailMessage"] = value;
             }
         }
     }

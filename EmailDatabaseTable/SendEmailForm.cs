@@ -8,6 +8,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.IO;
+using System.Net;
+using System.Net.Mail;
 
 namespace EmailDatabaseTable
 {
@@ -52,7 +54,7 @@ namespace EmailDatabaseTable
 
                 // Set up a command with the given query and associate
                 // this with the current connection.
-                using (SqlCommand cmd = new SqlCommand("SELECT name from sys.databases", myConnection))
+                using (SqlCommand cmd = new SqlCommand("SELECT name from sys.databases ORDER BY name", myConnection))
                 {
                     using (IDataReader dr = cmd.ExecuteReader())
                     {
@@ -88,7 +90,7 @@ namespace EmailDatabaseTable
 
                 // Set up a command with the given query and associate
                 // this with the current connection.
-                using (SqlCommand cmd = new SqlCommand("SELECT name from sys.tables", myConnection))
+                using (SqlCommand cmd = new SqlCommand("SELECT name from sys.tables ORDER BY name", myConnection))
                 {
                     using (IDataReader dr = cmd.ExecuteReader())
                     {
@@ -147,18 +149,6 @@ namespace EmailDatabaseTable
             return list;
         }
 
-        private void comboBoxSelectDatabase_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            comboBoxSelectTable.DataSource = null;
-            comboBoxSelectTable.DataSource = GetDatabaseTableList();
-        }
-
-        private void comboBoxSelectTable_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            comboBoxSelectDate.DataSource = null;
-            comboBoxSelectDate.DataSource = GeteCorrectionTableDateList();
-        }
-
         public void convertTableToDBF()
         {
             OleDbConnection conn;
@@ -201,51 +191,145 @@ namespace EmailDatabaseTable
             DataTable dataTable = new DataTable();
             using (SqlDataAdapter dataAdapter = new SqlDataAdapter(command.CommandText, myConnection))
             {
-                dataAdapter.Fill(dataTable);
+                try
+                {
+                    dataAdapter.Fill(dataTable);
+
+                    var lines = new List<string>();
+
+                    string[] columnNames = dataTable.Columns
+                        .Cast<DataColumn>()
+                        .Select(column => column.ColumnName)
+                        .ToArray();
+
+                    var header = string.Join(",", columnNames.Select(name => $"\"{name}\""));
+                    lines.Add(header);
+
+                    var valueLines = dataTable.AsEnumerable()
+                        .Select(row => string.Join(",", row.ItemArray.Select(val => $"\"{val}\"")));
+
+                    lines.AddRange(valueLines);
+
+                    try
+                    {
+                        File.WriteAllLines(table + ".csv", lines);
+                    }
+                    catch (IOException)
+                    {
+                        MessageBox.Show("Cannot access file. It might be open in another application.");
+                    }
+
+                    DialogResult resultSendMail = MessageBox.Show("CSV file " + table + ".csv created.\nProceed with sending Email?",
+                        "Send Email", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+                    if (resultSendMail == DialogResult.Yes)
+                    {
+                        sendEmailWithAttachment();
+                    }
+                }
+                catch (SqlException)
+                {
+                    MessageBox.Show("Invalid database or table selection.");
+                }
+                catch (System.OutOfMemoryException)
+                {
+                    MessageBox.Show("Table data too large to process.");
+                }
             }
 
-            Excel.Application xlApp = new Excel.Application();
+            /*
+                        Excel.Application xlApp = new Excel.Application();
 
-            if (xlApp == null)
+                        if (xlApp == null)
+                        {
+                            MessageBox.Show("Excel is not properly installed!");
+                            return;
+                        }
+
+
+                        Excel.Workbook xlWorkBook;
+                        Excel.Worksheet xlWorkSheet;
+                        object misValue = System.Reflection.Missing.Value;
+
+                        xlWorkBook = xlApp.Workbooks.Add(misValue);
+                        xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+
+                        Excel.Application xlApp = new Excel.Application();
+
+                        if (xlApp == null)
+                        {
+                            MessageBox.Show("Excel is not properly installed!");
+                            return;
+                        }
+
+
+                        Excel.Workbook xlWorkBook;
+                        Excel.Worksheet xlWorkSheet;
+                        object misValue = System.Reflection.Missing.Value;
+
+                        xlWorkBook = xlApp.Workbooks.Add(misValue);
+                        xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+                        xlWorkBook.SaveAs("csharp-Excel.xls", Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+                        xlWorkBook.Close(true, misValue, misValue);
+                        xlApp.Quit();
+
+                        Marshal.ReleaseComObject(xlWorkSheet);
+                        Marshal.ReleaseComObject(xlWorkBook);
+                        Marshal.ReleaseComObject(xlApp);
+            */
+        }
+
+        public void sendEmailWithAttachment()
+        {
+            MailMessage mail = new MailMessage();
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+            mail.From = new MailAddress(Properties.Settings.Default.SenderEmailId);
+            mail.To.Add(Properties.Settings.Default.ReceiverEmailId);
+            mail.Subject = Properties.Settings.Default.EmailSubject;
+            mail.Body = Properties.Settings.Default.EmailMessage;
+
+            Attachment attachment;
+            long length = new FileInfo(comboBoxSelectTable.Text + ".csv").Length;
+            if (length <= 17 * 1024 * 1024)
             {
-                MessageBox.Show("Excel is not properly installed!");
-                return;
+                attachment = new Attachment(comboBoxSelectTable.Text + ".csv");
+                mail.Attachments.Add(attachment);
+
+                SmtpServer.Port = 587;
+                SmtpServer.Credentials = new NetworkCredential(Properties.Settings.Default.SenderEmailId, Properties.Settings.Default.SenderEmailPassword);
+                SmtpServer.EnableSsl = true;
+
+                try
+                {
+                    SmtpServer.Send(mail);
+                    MessageBox.Show("Email sent.");
+                }
+                catch (SmtpException)
+                {
+                    DialogResult resultGoToGmail = MessageBox.Show("Email could not be sent. Go to:\nhttps://myaccount.google.com/lesssecureapps\nand turn Allow less secure apps: ON?"
+                        , "Go to Gmail", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+                    if (resultGoToGmail == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start("https://myaccount.google.com/lesssecureapps");
+                    }
+                }
             }
+            else
+            {
+                MessageBox.Show("File is too large to attach to Email.");
+            }
+        }
 
+        private void comboBoxSelectDatabase_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBoxSelectTable.DataSource = null;
+            comboBoxSelectTable.DataSource = GetDatabaseTableList();
+        }
 
-            Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
-            object misValue = System.Reflection.Missing.Value;
-
-            xlWorkBook = xlApp.Workbooks.Add(misValue);
-            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-
-            var lines = new List<string>();
-
-            string[] columnNames = dataTable.Columns
-                .Cast<DataColumn>()
-                .Select(column => column.ColumnName)
-                .ToArray();
-
-            var header = string.Join(",", columnNames.Select(name => $"\"{name}\""));
-            lines.Add(header);
-
-            var valueLines = dataTable.AsEnumerable()
-                .Select(row => string.Join(",", row.ItemArray.Select(val => $"\"{val}\"")));
-
-            lines.AddRange(valueLines);
-
-            File.WriteAllLines("d:\\excel.csv", lines);
-
-            xlWorkBook.SaveAs("d:\\csharp-Excel.xls", Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            xlWorkBook.Close(true, misValue, misValue);
-            xlApp.Quit();
-
-            Marshal.ReleaseComObject(xlWorkSheet);
-            Marshal.ReleaseComObject(xlWorkBook);
-            Marshal.ReleaseComObject(xlApp);
-
-            MessageBox.Show("Excel file created , you can find the file d:\\csharp-Excel.xls");
+        private void comboBoxSelectTable_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBoxSelectDate.DataSource = null;
+            comboBoxSelectDate.DataSource = GeteCorrectionTableDateList();
         }
 
         private void btnSendEmail_Click(object sender, EventArgs e)

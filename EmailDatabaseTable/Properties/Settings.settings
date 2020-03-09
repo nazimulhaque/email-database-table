@@ -20,7 +20,10 @@
     <Setting Name="ReceiverEmailId" Type="System.String" Scope="User">
       <Value Profile="(Default)">BLANK</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.String" Scope="User">
+    <Setting Name="EmailSubject" Type="System.String" Scope="User">
+      <Value Profile="(Default)">BLANK</Value>
+    </Setting>
+    <Setting Name="EmailMessage" Type="System.String" Scope="User">
       <Value Profile="(Default)">BLANK</Value>
     </Setting>
   </Settings>

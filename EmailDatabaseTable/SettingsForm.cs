@@ -28,6 +28,8 @@ namespace EmailDatabaseTable
                 Properties.Settings.Default.SenderEmailId = txtSenderEmailId.Text;
                 Properties.Settings.Default.SenderEmailPassword = txtSenderEmailPassword.Text;
                 Properties.Settings.Default.ReceiverEmailId = txtReceiverEmailId.Text;
+                Properties.Settings.Default.EmailSubject = txtEmailSubject.Text;
+                Properties.Settings.Default.EmailMessage = txtEmailMessage.Text;
                 Properties.Settings.Default.Save();
 
                 SendEmailForm sendEmailForm = new SendEmailForm();
@@ -60,6 +62,11 @@ namespace EmailDatabaseTable
                     MessageBox.Show("Sender E-mail ID is not valid.");
                     return false;
                 }
+                else if (!IsValidGmailId(txtSenderEmailId.Text))
+                {
+                    MessageBox.Show("Sender E-mail ID must be a Gmail ID.");
+                    return false;
+                }
                 else if (string.IsNullOrEmpty(txtSenderEmailPassword.Text))
                 {
                     MessageBox.Show("Sender E-mail password cannot be empty.");
@@ -68,6 +75,16 @@ namespace EmailDatabaseTable
                 else if (!IsValidEmail(txtReceiverEmailId.Text))
                 {
                     MessageBox.Show("Receiver E-mail ID is not valid.");
+                    return false;
+                }
+                else if (string.IsNullOrEmpty(txtEmailSubject.Text))
+                {
+                    MessageBox.Show("E-mail subject cannot be empty.");
+                    return false;
+                }
+                else if (string.IsNullOrEmpty(txtEmailMessage.Text))
+                {
+                    MessageBox.Show("E-mail message cannot be empty.");
                     return false;
                 }
                 else
@@ -92,6 +109,11 @@ namespace EmailDatabaseTable
             {
                 return false;
             }
+        }
+
+        bool IsValidGmailId(string email)
+        {
+            return IsValidEmail(email) && email.Substring(email.Length - 10, 10).Equals("@gmail.com");
         }
 
         bool IsValidIpAddress(string input)
@@ -121,8 +143,12 @@ namespace EmailDatabaseTable
             {
                 txtServerIp.Text = Properties.Settings.Default.DatabaseServerIp;
                 txtDatabaseUserId.Text = Properties.Settings.Default.DatabaseUserId;
+                txtDatabasePassword.Text = Properties.Settings.Default.DatabaseUserPassword;
                 txtSenderEmailId.Text = Properties.Settings.Default.SenderEmailId;
+                txtSenderEmailPassword.Text = Properties.Settings.Default.SenderEmailPassword;
                 txtReceiverEmailId.Text = Properties.Settings.Default.ReceiverEmailId;
+                txtEmailSubject.Text = Properties.Settings.Default.EmailSubject;
+                txtEmailMessage.Text = Properties.Settings.Default.EmailMessage;
             }
         }
     }
